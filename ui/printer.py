@@ -27,9 +27,6 @@ class BoardPrinter(receiver.Receiver):
             print "EXCEPTION!!!!"
             import traceback
             traceback.print_exc()
-            import time
-            time.sleep(5)
-            self.reprint()
 
     def read_board(self, board_str):
         try:
