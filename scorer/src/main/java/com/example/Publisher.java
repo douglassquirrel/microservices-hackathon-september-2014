@@ -2,6 +2,8 @@ package com.example;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -14,6 +16,8 @@ public class Publisher {
     private final String exchangeName;
 
     private final Connection connection;
+
+    Logger logger = LoggerFactory.getLogger(Publisher.class);
 
     @Autowired
     public Publisher(@Value("${rabbitmq.exchangeName}") String exchangeName, Connection connection) {
@@ -31,6 +35,6 @@ public class Publisher {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(" [x] Sent '" + message + "'");
+        logger.info("Sent '" + message + "'");
     }
 }

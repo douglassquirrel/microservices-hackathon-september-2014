@@ -40,8 +40,6 @@ public class ScoreProcessor {
 
             Collections.sort(maxWords, new StringLengthComparator());
 
-            System.out.println(inputMessage);
-
             OutputMessage outputMessage = new OutputMessage();
             outputMessage.id = inputMessage.id;
             outputMessage.word = maxWords.get(0);
