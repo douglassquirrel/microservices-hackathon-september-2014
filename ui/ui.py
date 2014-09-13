@@ -1,14 +1,17 @@
+import time
 
 class UI(object):
     def __init__(self):
-        import time
-        self.id = str(time.time())
         import publisher
         import printer
         self.publisher = publisher.Publisher()
         self.printer = printer.BoardPrinter()
-        self.printer.set_id(self.id)
         self.run_printer_in_thread()
+        self.new_game()
+
+    def new_game(self):
+        self.id = str(time.time())
+        self.printer.set_id(self.id)
         self.game_start()
 
     def game_start(self):
@@ -59,6 +62,8 @@ class UI(object):
             self.move_right()
         elif key == 'q' or key == '\x03':
             self.quit()
+        elif key == 'n':
+            self.new_game()
 #         elif key == '0':
 #             self.publish_sample_board()
         else:

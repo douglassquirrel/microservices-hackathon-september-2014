@@ -9,6 +9,9 @@ class BoardPrinter(receiver.Receiver):
     status = None
 
     def set_id(self, id):
+        self.status = None
+        self.board = []
+        self.score = 0
         self.id = id
 
     def receive(self, channel, method, props, body):
