@@ -1,5 +1,7 @@
 #!/usr/bin/env coffee
-# Run with CoffeeScript
+# ^runs with CoffeeScript
+# 
+# Publishes a single message to a given topic
 #
 context = require('rabbit.js').createContext('amqp://54.76.117.95:5672')
 argv = require('optimist').argv
@@ -13,17 +15,6 @@ unless (argv.m? || argv.message?)
 if argv.h || argv.help
   console.log "Usage: ./publish.coffee --topic topic_name --message 'JSON message to send'"
   process.exit()
-
-pub = context.socket 'PUBLISH'
-sub = context.socket 'SUBSCRIBE'
-
-pub.connect pub
-
-grid = [1..12].map -> [1..6].map -> ""
-
-message =
-  id: 12
-  grid: grid
 
 context.on 'ready', ->
   publisher = context.socket 'PUB', { routing: 'topic' }
