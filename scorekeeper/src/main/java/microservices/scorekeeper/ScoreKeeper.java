@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.QueueingConsumer;
+import microservices.scorekeeper.messages.GameEnded;
 import microservices.scorekeeper.messages.GameScore;
 import microservices.scorekeeper.messages.GameStarted;
 import microservices.scorekeeper.messages.WordScored;
@@ -19,10 +20,11 @@ public class ScoreKeeper {
     public static final String GAME_SCORE_TOPIC = "game.score";
     public static final String WORD_SCORE_TOPIC = "words.scored";
     public static final String GAME_STARTED_TOPIC = "game.started";
+    public static final String GAME_ENDED_TOPIC = "game.ended";
 
     private ConnectionFactory connectionFactory = setUpConnectionFactory();
     private Publisher publisher = new Publisher(connectionFactory, EXCHANGE_NAME);
-    private Subscriber subscriber = new Subscriber(connectionFactory, EXCHANGE_NAME, WORD_SCORE_TOPIC, GAME_STARTED_TOPIC);
+    private Subscriber subscriber = new Subscriber(connectionFactory, EXCHANGE_NAME, WORD_SCORE_TOPIC, GAME_STARTED_TOPIC, GAME_ENDED_TOPIC);
     private ObjectMapper objectMapper = new ObjectMapper();
     private Map<String, Long> scores = new HashMap<>();
 
@@ -36,12 +38,12 @@ public class ScoreKeeper {
     private void broadcastNewScore(String id, long score) throws JsonProcessingException {
         String message = objectMapper.writeValueAsString(new GameScore(id, score));
         publisher.publish(GAME_SCORE_TOPIC, message);
-        System.out.println("Published '" + message + "' on totalScore");
+        System.out.println("Published '" + message + "' on " + GAME_SCORE_TOPIC);
     }
 
     private void handleWordScored(WordScored wordScored) throws JsonProcessingException {
         if (!scores.containsKey(wordScored.id)) {
-            System.out.println("Unknown game " + wordScored.id);
+            System.out.println("Unknown game: " + wordScored.id);
             return;
         }
         long score = scores.get(wordScored.id);
@@ -51,8 +53,14 @@ public class ScoreKeeper {
     }
 
     private void handleGameStarted(GameStarted gameStarted) throws JsonProcessingException {
+        System.out.println("Tracking new game: " + gameStarted.id);
         scores.put(gameStarted.id, 0L);
         broadcastNewScore(gameStarted.id, 0);
+    }
+
+    private void handleGameEnded(GameEnded gameEnded) {
+        System.out.println("Game " + gameEnded.id + " is no longer tracked");
+        scores.remove(gameEnded.id);
     }
 
     private void processOneMessage() throws IOException {
@@ -68,6 +76,9 @@ public class ScoreKeeper {
         } else if (topic.equals(GAME_STARTED_TOPIC)) {
             GameStarted gameStarted = objectMapper.readValue(message, GameStarted.class);
             handleGameStarted(gameStarted);
+        } else if (topic.equals(GAME_ENDED_TOPIC)) {
+            GameEnded gameEnded = objectMapper.readValue(message, GameEnded.class);
+            handleGameEnded(gameEnded);
         }
     }
 
