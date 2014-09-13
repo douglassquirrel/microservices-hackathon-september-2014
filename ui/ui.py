@@ -49,6 +49,9 @@ class UI(object):
     def move_right(self):
         self.publish_action('right', 'game.key')
 
+    def move_down(self):
+        self.publish_action('down', 'game.key')
+
     def publish_sample_board(self):
         self.publisher.publish('ui',
             {'board': [['x']*16]*30})
@@ -58,6 +61,8 @@ class UI(object):
         key = term.getch()
         if key == 'a':
             self.move_left()
+        elif key == 's':
+            self.move_down()
         elif key == 'd':
             self.move_right()
         elif key == 'q' or key == '\x03':
