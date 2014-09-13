@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.Socket;
 import java.net.URL;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.http.ConnectionReuseStrategy;
 import org.apache.http.Consts;
@@ -136,8 +138,13 @@ public class Receiver {
 	public void poll() {
 
 		while (true) {
-			getNextMessage();
-
+			Object data = getNextMessage();
+			if(data == null) {
+				continue;
+			}
+			String id = ((Map)data).get("id").toString();
+			List<List<String>> grid  = (List<List<String>>)(((Map)data).get("grid"));
+			
 		}
 	}
 
