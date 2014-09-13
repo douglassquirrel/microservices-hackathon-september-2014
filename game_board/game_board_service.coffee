@@ -16,6 +16,8 @@ publishBoardUpdate = (publisher,gameId)->
 
 moveLetterDown = (publisher,gameId)->
     console.log("moving down #{gameId}")
+    if (!games[gameId].letter_possition) then return;
+        
     letter_position = games[gameId].letter_possition;
     grid = games[gameId].grid
     
@@ -33,6 +35,8 @@ moveLetterDown = (publisher,gameId)->
         
 moveLetterLeft = (publisher,gameId)->
     console.log("moving left #{gameId}")
+    if (!games[gameId].letter_possition) then return;
+    
     letter_position = games[gameId].letter_possition;
     grid = games[gameId].grid
     if(letter_position.x>0)
@@ -43,6 +47,8 @@ moveLetterLeft = (publisher,gameId)->
 
 moveLetterRight = (publisher,gameId)->
     console.log("moving right #{gameId}")
+    if (!games[gameId].letter_possition) then return;
+        
     letter_position = games[gameId].letter_possition;
     grid = games[gameId].grid
     if(letter_position.x<columnSize)
