@@ -23,9 +23,13 @@ class BoardPrinter(receiver.Receiver):
             elif 'score' in content:
                 self.score = content['score']
                 self.reprint()
-        except:
-            print "RECEIVE EXCEPTION"
-            raise
+        except Exception, e:
+            print "EXCEPTION!!!!"
+            import traceback
+            traceback.print_exc()
+            import time
+            time.sleep(5)
+            self.reprint()
 
     def read_board(self, board_str):
         try:
