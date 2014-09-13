@@ -8,7 +8,7 @@ import java.net.URL;
 
 import com.microserviceshack2.dictionary.Config;
 
-public class ReadTopics {
+public class ReadQueue {
 
 	public String getHTML(String urlToRead) {
 		URL url;
@@ -35,7 +35,7 @@ public class ReadTopics {
 	}
 
 	public static void main(String args[]) {
-		ReadTopics c = new ReadTopics();
-		System.out.println(c.getHTML(Config.REST_URL + "/topics/game"));
+		ReadQueue c = new ReadQueue();
+		System.out.println(c.getHTML(Config.REST_URL + "/queues/game"));
 	}
 }
