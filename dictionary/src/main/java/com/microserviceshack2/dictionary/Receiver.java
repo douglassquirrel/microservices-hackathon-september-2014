@@ -163,7 +163,9 @@ public class Receiver {
 			for (int i = 0; i < rows.get(0).length(); i++) {
 				StringBuilder column = new StringBuilder();
 				for (String row : rows) {
-					column.append(row.charAt(i));
+					if (row.length() > i) {
+						column.append(row.charAt(i));
+					}
 				}
 				columns.add(column.toString());
 			}
