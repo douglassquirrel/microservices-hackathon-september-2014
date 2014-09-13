@@ -12,21 +12,18 @@ public class Subscriber {
 
     private QueueingConsumer consumer;
 
-    public Subscriber(ConnectionFactory connectionFactory, String exchangeName, String routingKey) {
-        Connection connection;
+    public Subscriber(ConnectionFactory connectionFactory, String exchangeName, String... routingKeys) {
         try {
-            connection = connectionFactory.newConnection();
+            Connection connection = connectionFactory.newConnection();
             Channel channel = connection.createChannel();
             channel.exchangeDeclare(exchangeName, "topic");
             String queueName = channel.queueDeclare().getQueue();
-            System.out.println(queueName);
-            channel.queueBind(queueName, exchangeName, routingKey);
-
-            System.out.println("Listening for messages");
+            for (String routingKey : routingKeys) {
+                channel.queueBind(queueName, exchangeName, routingKey);
+            }
 
             consumer = new QueueingConsumer(channel);
             channel.basicConsume(queueName, true, consumer);
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
