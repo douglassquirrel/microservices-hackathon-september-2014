@@ -51,7 +51,7 @@ moveLetterRight = (publisher,gameId)->
         
     letter_position = games[gameId].letter_possition;
     grid = games[gameId].grid
-    if(letter_position.x<columnSize)
+    if(letter_position.x<columnSize-1)
         grid[letter_position.y][letter_position.x + 1 ] = grid[letter_position.y][letter_position.x]
         grid[letter_position.y][letter_position.x] = ''
         letter_position.x++
@@ -115,7 +115,7 @@ newLetterEventHandler = (publisher)->
             games[letter_message.id].letter_possition = { x:x, y:y }
             games[letter_message.id].moveDownTimer = setInterval(-> 
                 moveLetterDown(publisher,letter_message.id)
-            , 1000)
+            , 500)
             
             publishBoardUpdate(publisher,letter_message.id)
             
