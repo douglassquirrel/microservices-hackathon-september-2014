@@ -145,7 +145,14 @@ public class Receiver {
 			}
 			String id = ((Map)data).get("id").toString();
 			List<List<String>> grid  = (List<List<String>>)(((Map)data).get("grid"));
-			
+			List<String> gridConverted = new ArrayList<String>();
+			for (List<String> list : grid) {
+				StringBuilder sb = new StringBuilder();
+				for (String string : list) {
+					sb.append(string);
+				}
+				gridConverted.add(sb.toString());
+			}
 		}
 	}
 
