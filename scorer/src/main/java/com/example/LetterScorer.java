@@ -1,8 +1,11 @@
 package com.example;
 
+import org.springframework.stereotype.Component;
+
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class LetterScorer {
 
     Map<Character, Integer> letterScores = new HashMap<>();

@@ -1,15 +1,20 @@
 package com.example;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.*;
 
+@Service
 public class ScoreProcessor {
 
-    private ObjectMapper mapper = new ObjectMapper();
+    @Autowired
+    private ObjectMapper mapper;
 
-    private LetterScorer letterScorer = new LetterScorer();
+    @Autowired
+    private LetterScorer letterScorer;
 
     public String process(String message) {
         try {

@@ -2,24 +2,23 @@ package com.example;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+@Component
 public class Publisher {
 
-    private Channel channel;
+    private final String exchangeName;
 
-    public Publisher() {
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("54.76.117.95");
-        Connection connection;
-        try {
-            connection = factory.newConnection();
-            channel = connection.createChannel();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private final Connection connection;
+
+    @Autowired
+    public Publisher(@Value("${rabbitmq.exchangeName}") String exchangeName, Connection connection) {
+        this.exchangeName = exchangeName;
+        this.connection = connection;
     }
 
     public void publish(String message, String topicName) {
@@ -27,7 +26,8 @@ public class Publisher {
             return;
         }
         try {
-            channel.basicPublish("combo", topicName, null, message.getBytes());
+            Channel channel = connection.createChannel();
+            channel.basicPublish(exchangeName, topicName, null, message.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }

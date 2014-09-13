@@ -2,7 +2,6 @@ package com.example;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.util.List;
 import java.util.Map;
 
 public class OutputMessage {

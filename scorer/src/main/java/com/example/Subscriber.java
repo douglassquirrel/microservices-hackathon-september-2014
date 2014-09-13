@@ -2,27 +2,29 @@ package com.example;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.QueueingConsumer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+@Component
 public class Subscriber {
 
-    private static final String EXCHANGE_NAME = "combo";
+    @Value("${rabbitmq.exchangeName}")
+    private String exchangeName;
+
+    @Autowired
+    private Connection connection;
 
     public void subscribe(String topicName, MessageProcessor processor) {
         try {
-            ConnectionFactory factory = new ConnectionFactory();
-            factory.setHost("54.76.117.95");
-            Connection connection = null;
-            connection = factory.newConnection();
-
             Channel channel = connection.createChannel();
 
-            channel.exchangeDeclare(EXCHANGE_NAME, "topic");
+            channel.exchangeDeclare(exchangeName, "topic");
             String queueName = channel.queueDeclare().getQueue();
-            channel.queueBind(queueName, EXCHANGE_NAME, topicName);
+            channel.queueBind(queueName, exchangeName, topicName);
 
             System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 

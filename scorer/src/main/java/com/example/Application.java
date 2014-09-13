@@ -1,33 +1,48 @@
 package com.example;
 
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.QueueingConsumer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
 
 import java.io.IOException;
 
-public class Application {
+@EnableAutoConfiguration
+@ComponentScan
+public class Application implements CommandLineRunner {
 
-    public static final String WORDS_FOUND_TOPIC = "wordsFound";
-    public static final String WORD_SCORED_TOPIC = "wordScored";
+    @Value("${topic.wordsFound}")
+    private String wordsFoundTopic;
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    @Value("${topic.wordScored}")
+    private String wordsScoredTopic;
 
-        final Subscriber subscriber = new Subscriber();
-        final Publisher publisher = new Publisher();
-        final ScoreProcessor scoreProcessor = new ScoreProcessor();
+    @Autowired
+    private ScoreProcessor scoreProcessor;
 
-        subscriber.subscribe(WORDS_FOUND_TOPIC, new Subscriber.MessageProcessor() {
+    @Autowired
+    private Subscriber subscriber;
+
+    @Autowired
+    private Publisher publisher;
+
+    @Override
+    public void run(String... strings) throws Exception {
+        subscriber.subscribe(wordsFoundTopic, new Subscriber.MessageProcessor() {
 
             @Override
             public void process(String message) {
                 String response = scoreProcessor.process(message);
-                publisher.publish(response, WORD_SCORED_TOPIC);
+                publisher.publish(response, wordsScoredTopic);
             }
 
         });
+    }
 
+    public static void main(String[] args) throws IOException, InterruptedException {
+        SpringApplication.run(Application.class, args);
     }
 
 }
