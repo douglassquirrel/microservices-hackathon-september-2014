@@ -1,5 +1,7 @@
 .idea
 .gradle
+.DS_Store
+classes
 out
 *.iml
 gradle
