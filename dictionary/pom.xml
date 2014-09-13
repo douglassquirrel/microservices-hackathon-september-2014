@@ -28,14 +28,16 @@
      <artifactId>dropwizard-jackson</artifactId>
      <version>${dropwizard.version}</version>            
     </dependency>
-    
-	<dependency>
-		<groupId>junit</groupId>
-		<artifactId>junit</artifactId>
-		<version>4.10</version>
-		<!--<scope>test</scope>-->
-	</dependency>
-    
-  </dependencies>
-  
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>18.0</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+        </dependency>
+    </dependencies>
 </project>
