@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.QueueingConsumer;
+import microservices.scorekeeper.messages.GameScore;
 import microservices.scorekeeper.messages.GameStarted;
-import microservices.scorekeeper.messages.TotalScore;
 import microservices.scorekeeper.messages.WordScored;
 
 import java.io.IOException;
@@ -16,7 +16,7 @@ public class ScoreKeeper {
     public static final String EXCHANGE_NAME = "combo";
     public static final String CONNECTION_HOST = "54.76.117.95";
     public static final int CONNECTION_PORT = 5672;
-    public static final String TOTAL_SCORE_TOPIC = "totalScore";
+    public static final String GAME_SCORE_TOPIC = "game.score";
     public static final String WORD_SCORE_TOPIC = "words.scored";
     public static final String GAME_STARTED_TOPIC = "game.started";
 
@@ -34,8 +34,8 @@ public class ScoreKeeper {
     }
 
     private void broadcastNewScore(String id, long score) throws JsonProcessingException {
-        String message = objectMapper.writeValueAsString(new TotalScore(id, score));
-        publisher.publish(TOTAL_SCORE_TOPIC, message);
+        String message = objectMapper.writeValueAsString(new GameScore(id, score));
+        publisher.publish(GAME_SCORE_TOPIC, message);
         System.out.println("Published '" + message + "' on totalScore");
     }
 
