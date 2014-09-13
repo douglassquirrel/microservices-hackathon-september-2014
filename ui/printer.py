@@ -2,8 +2,9 @@ import receiver
 import json
 
 class BoardPrinter(receiver.Receiver):
-    topics = ['board.*', 'totalScore']
-    score = 'Not implemented yet'
+    topics = ['board.*', 'game.score']
+    score = 0
+    board = []
     id = None
 
     def set_id(self, id):
