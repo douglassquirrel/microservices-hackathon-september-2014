@@ -2,7 +2,7 @@ import receiver
 import json
 
 class BoardPrinter(receiver.Receiver):
-    topic = 'board.*'
+    topics = ['board.*', 'totalScore']
     score = 'Not implemented yet'
     id = None
 
@@ -11,12 +11,18 @@ class BoardPrinter(receiver.Receiver):
 
     def receive(self, channel, method, props, body):
         try:
-            print "received", method.exchange, method.routing_key
-            board = self.read_board(body)
-            if board is None:
+            content = json.loads(body)
+            if content.get('id') != self.id:
                 return
-            self.clear_screen()
-            self.print_board(board)
+            topic = method.routing_key
+            if topic.startswith('board.'):
+                board = self.read_board(body)
+                if board is None:
+                    return
+                self.print_board(board)
+            elif 'score' in content:
+                self.score = content['score']
+                self.reprint()
         except:
             print "RECEIVE EXCEPTION"
             raise
@@ -26,9 +32,6 @@ class BoardPrinter(receiver.Receiver):
             board = json.loads(board_str)
         except:
             print "board_str", `board_str`
-            return
-        board_id = board.get('id')
-        if board_id != self.id:
             return
         if 'grid' in board:
             return board['grid']
@@ -40,6 +43,12 @@ class BoardPrinter(receiver.Receiver):
         return
 
     def print_board(self, board):
+        self.board = board
+        self.reprint()
+
+    def reprint(self):
+        board = self.board
+        self.clear_screen()
         width = len(board[0])*3
         print "+" + "-" * width + "+"
         for row in board:
