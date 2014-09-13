@@ -3,8 +3,8 @@ package com.microserviceshack2.rabbitmq.example;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.microserviceshack2.dictionary.*;
+import com.microserviceshack2.dictionary.Config;
+import com.microserviceshack2.dictionary.Message;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -25,17 +25,17 @@ public class Publisher {
 			channel.exchangeDeclare(Config.EXCHANGE, "topic");
 
 			String routingKey = "topic";
-			Map<String, Object> message = new HashMap<String, Object>();
-			message.put("User", "Ivan");
-			message.put("Data", "Hello Hackers");
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("User", "Ivan");
+			data.put("Data", "Hello Hackers");
 
-			ObjectMapper mapper = new ObjectMapper();
-			String string = mapper.writeValueAsString(message);
+			Message message = new Message();
+			message.setDetails(data);
+			String string = message.getJson();
 
 			channel.basicPublish(Config.EXCHANGE, routingKey, null,
 					string.getBytes());
-			System.out.println(" [x] Sent '" + routingKey + "':'" + message
-					+ "'");
+			System.out.println(" [x] Sent '" + routingKey + "':'" + data + "'");
 
 		} catch (Exception e) {
 			e.printStackTrace();
