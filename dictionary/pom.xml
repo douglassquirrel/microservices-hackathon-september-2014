@@ -3,4 +3,24 @@
   <groupId>com.microserviceshack2.dictionary</groupId>
   <artifactId>dictionary</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <properties>
+      <rabbitmq.client.version>3.3.4</rabbitmq.client.version>
+              <dropwizard.version>0.7.0</dropwizard.version>
+      
+  </properties>
+  
+  <dependencies>
+
+      <dependency>
+        <groupId>com.rabbitmq</groupId>
+        <artifactId>amqp-client</artifactId>
+        <version>${rabbitmq.client.version}</version>
+    </dependency>
+    <dependency>
+     <groupId>io.dropwizard</groupId>
+     <artifactId>dropwizard-jackson</artifactId>
+     <version>${dropwizard.version}</version>            
+    </dependency>
+  </dependencies>
+  
 </project>
