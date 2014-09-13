@@ -1,9 +1,7 @@
 package com.microserviceshack2.rabbitmq.example;
 
-import java.util.Map;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microserviceshack2.dictionary.Config;
+import com.microserviceshack2.dictionary.Message;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -42,14 +40,13 @@ public class Receiver {
 						+ message + "'");
 
 				try {
-					ObjectMapper mapper = new ObjectMapper();
-					@SuppressWarnings("unchecked")
-					Map<Object, Object> response = mapper.readValue(message,
-							Map.class);
-					for (Object key : response.keySet()) {
-						System.out.println("Key is " + key + " value is "
-								+ response.get(key));
-					}
+					// ObjectMapper mapper = new ObjectMapper();
+					// @SuppressWarnings("unchecked")
+					// Map<Object, Object> response = mapper.readValue(message,
+					// Map.class);
+					Message msg = new Message();
+					msg.setFromJson(message);
+					msg.dump();
 				} catch (Exception e) {
 				}
 			}
@@ -64,4 +61,5 @@ public class Receiver {
 			}
 		}
 	}
+
 }
