@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Map;
 
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
@@ -49,9 +50,16 @@ public class WordCheckerTest {
     @Test
     public void return_list_of_valid_word_in_string()
     {
-        List<String> validWords = wordChecker.getValidWords("fishpies");
+        Map<String, Integer> validWords = wordChecker.getValidWords("fishpies");
         assertFalse(validWords.isEmpty());
-        validWords.forEach(System.out::println);
+        outputValidWords(validWords);
+    }
+
+    private void outputValidWords(Map<String, Integer> validWords) {
+        for (String word : validWords.keySet())
+        {
+            System.out.println(word + " (" + validWords.get(word) + ")");
+        }
     }
 
     @Test

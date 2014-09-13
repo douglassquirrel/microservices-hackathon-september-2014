@@ -11,10 +11,7 @@ import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -84,20 +81,27 @@ public class WordChecker {
         }
     }
 
-    List<String> getSubStrings(String string) {
-        List<String> subStrings = new ArrayList<>();
+    Map<String, Integer> getSubStrings(String string) {
+        Map<String, Integer> subStrings = new LinkedHashMap<>();
         for (int from = 0; from < string.length(); from++) {
             for (int to = from + 1; to <= string.length(); to++) {
-                subStrings.add(string.substring(from, to));
+                subStrings.put(string.substring(from, to), from);
             }
         }
         return subStrings;
     }
 
-    public List<String> getValidWords(String string) {
-        List<String> validWords = new ArrayList<>();
-        List<String> candidateWords = getSubStrings(string);
-        validWords.addAll(candidateWords.stream().filter(candidateWord -> isValid(candidateWord)).collect(Collectors.toList()));
+    public Map<String, Integer> getValidWords(String string) {
+        Map<String, Integer> validWords = new LinkedHashMap<>();
+        Map<String, Integer> candidateWordsMap = getSubStrings(string);
+        for (String candidateWord : candidateWordsMap.keySet())
+        {
+            if (isValid(candidateWord))
+            {
+                validWords.put(candidateWord, candidateWordsMap.get(candidateWord));
+            }
+        }
+        //validWords.addAll(candidateWords.stream().filter(candidateWord -> isValid(candidateWord)).collect(Collectors.toList()));
         return validWords;
     }
 }
