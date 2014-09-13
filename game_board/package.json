@@ -2,6 +2,7 @@
   "name": "game_board",
   "description": "Tracks key presses and publishes game board letter movements",
   "dependencies": {
+    "coffee-script": "^1.8.0",
     "pg": "^3.4.2",
     "rabbit.js": "^0.4.1"
   }
