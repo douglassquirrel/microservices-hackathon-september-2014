@@ -51,12 +51,13 @@ class UI(object):
             {'board': [['x']*16]*30})
 
     def read_key(self):
-        key = raw_input()
+        import term
+        key = term.getch()
         if key == 'a':
             self.move_left()
         elif key == 'd':
             self.move_right()
-        elif key == 'q':
+        elif key == 'q' or key == '\x03':
             self.quit()
 #         elif key == '0':
 #             self.publish_sample_board()
