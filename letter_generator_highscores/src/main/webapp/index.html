@@ -1,0 +1,94 @@
+<html>
+<head>
+    <title>Scrabble Tetris</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script>
+        function updateScores() {
+            $.get("/scores", function (data) {
+                setTimeout(function () {
+                    updateScores();
+                }, 2000);
+
+                for (var i = 0; i < 10; i++) {
+                    var row = $('#game_' + i + ' td');
+                    if (i < data.length) {
+                        var score = data[i];
+                        $($(row)[0]).text(score.id);
+                        $($(row)[1]).text(score.score);
+                        if (score.ended) {
+                            $(row).attr('class', 'danger');
+                        } else {
+                            $(row).attr('class', 'success');
+                        }
+                    } else {
+                        $($(row)[0]).text('');
+                        $($(row)[1]).text('');
+                        $(row).attr('class', 'active');
+                    }
+                }
+            })
+        }
+
+        $(function () {
+            updateScores();
+        });
+    </script>
+</head>
+<body>
+<h1>High Scores</h1>
+
+<div id="scores">
+    <table class="table">
+        <thead>
+        <td>Game</td>
+        <td>Score</td>
+        </thead>
+        <tbody>
+        <tr id="game_0">
+            <td></td>
+            <td></td>
+        </tr>
+        <tr id="game_1">
+            <td></td>
+            <td></td>
+        </tr>
+        <tr id="game_2">
+            <td></td>
+            <td></td>
+        </tr>
+        <tr id="game_3">
+            <td></td>
+            <td></td>
+        </tr>
+        <tr id="game_4">
+            <td></td>
+            <td></td>
+        </tr>
+        <tr id="game_5">
+            <td></td>
+            <td></td>
+        </tr>
+        <tr id="game_6">
+            <td></td>
+            <td></td>
+        </tr>
+        <tr id="game_7">
+            <td></td>
+            <td></td>
+        </tr>
+        <tr id="game_8">
+            <td></td>
+            <td></td>
+        </tr>
+        <tr id="game_9">
+            <td></td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
