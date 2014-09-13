@@ -1,41 +1,38 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.microserviceshack2.dictionary</groupId>
-  <artifactId>dictionary</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <properties>
-      <rabbitmq.client.version>3.3.4</rabbitmq.client.version>
-      <dropwizard.version>0.7.0</dropwizard.version>
-      <http.client.version>4.3.5</http.client.version>      
-  </properties>
-  
-  <dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.microserviceshack2.dictionary</groupId>
+    <artifactId>dictionary</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <properties>
+        <rabbitmq.client.version>3.3.4</rabbitmq.client.version>
+        <dropwizard.version>0.7.0</dropwizard.version>
 
-      <dependency>
-        <groupId>com.rabbitmq</groupId>
-        <artifactId>amqp-client</artifactId>
-        <version>${rabbitmq.client.version}</version>
-    </dependency>
+    </properties>
+
+    <dependencies>
 
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>${http.client.version}</version>
+            <groupId>com.rabbitmq</groupId>
+            <artifactId>amqp-client</artifactId>
+            <version>${rabbitmq.client.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.dropwizard</groupId>
+            <artifactId>dropwizard-jackson</artifactId>
+            <version>${dropwizard.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>18.0</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
         </dependency>
 
-    <dependency>
-     <groupId>io.dropwizard</groupId>
-     <artifactId>dropwizard-jackson</artifactId>
-     <version>${dropwizard.version}</version>            
-    </dependency>
-    
-	<dependency>
-		<groupId>junit</groupId>
-		<artifactId>junit</artifactId>
-		<version>4.10</version>
-		<!--<scope>test</scope>-->
-	</dependency>
-    
-  </dependencies>
-  
+    </dependencies>
+
 </project>
