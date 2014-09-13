@@ -9,6 +9,9 @@ class BoardPrinter(receiver.Receiver):
     status = None
 
     def set_id(self, id):
+        self.status = None
+        self.board = []
+        self.score = 0
         self.id = id
 
     def receive(self, channel, method, props, body):
@@ -57,8 +60,10 @@ class BoardPrinter(receiver.Receiver):
         width = 0
         if board:
             width = len(board[0])*3
+            print "\r",
             print "+" + "-" * width + "+"
             for row in board:
+                print "\r",
                 print "|",
                 pad = ""
                 for item in row:
@@ -66,17 +71,23 @@ class BoardPrinter(receiver.Receiver):
                     pad = " "
                 print "|",
                 print ""
+            print "\r",
             print "+" + "-" * width + "+"
         else:
-            print "No board!"
+            self.prn("No board!")
         self.print_footer()
+        print "\r",
+
+    def prn(self, txt):
+        print "\r",
+        print txt
 
     def print_footer(self):
-        print ""
-        print "*** Current score:", self.score
+        self.prn("")
+        self.prn("*** Current score:"+ str(self.score))
         if self.status:
-            print "    ", self.status
-        print "(game id = %s)" % (self.id, )
+            self.prn("    "+ str(self.status))
+        self.prn("(game id = %s)" % (self.id, ))
 
     def run(self):
         self.start()
