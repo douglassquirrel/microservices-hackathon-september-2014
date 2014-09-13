@@ -7,6 +7,7 @@ import java.util.List;
 
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 public class WordCheckerTest {
 
@@ -44,4 +45,20 @@ public class WordCheckerTest {
         assertFalse(wordChecker.isInvalid("bonk"));
     }
 
+    @Test
+    public void return_list_of_valid_word_in_string()
+    {
+        List<String> validWords = wordChecker.getValidWords("doggie");
+        assertFalse(validWords.isEmpty());;
+        for (String word : validWords)
+        {
+            System.out.println(word);
+        }
+    }
+
+    @Test
+    public void return_all_sub_strings()
+    {
+        assertEquals(6, wordChecker.getSubStrings("cat").size());
+    }
 }
