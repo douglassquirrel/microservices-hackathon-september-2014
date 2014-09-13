@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.Socket;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -160,6 +161,21 @@ public class Receiver {
 		}
 
 		return data;
+	}
+
+	public List<String> getColumns(List<String> rows) {
+		List<String> columns = new ArrayList<String>();
+		if (!rows.isEmpty()) {
+			for (int i = 0; i < rows.get(0).length(); i++) {
+				StringBuilder column = new StringBuilder();
+				for (String row : rows) {
+					column.append(row.charAt(i));
+				}
+				columns.add(column.toString());
+			}
+		}
+		return columns;
+
 	}
 
 	private void init() {
