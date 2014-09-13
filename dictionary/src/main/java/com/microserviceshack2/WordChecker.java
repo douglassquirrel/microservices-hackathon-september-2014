@@ -20,11 +20,15 @@ import java.util.stream.Stream;
  */
 public class WordChecker {
 
+    private static final WordChecker INSTANCE = new WordChecker();
+
     public static final String WORD_LIST = "/word-list.txt";
     private BloomFilter<String> wordFilter;
     private Set<String> allWords;
 
-    public WordChecker() {
+    public static WordChecker getInstance() { return INSTANCE; }
+
+    private WordChecker() {
         loadWords();
     }
 
@@ -94,14 +98,9 @@ public class WordChecker {
     public Map<String, Integer> getValidWords(String string) {
         Map<String, Integer> validWords = new LinkedHashMap<>();
         Map<String, Integer> candidateWordsMap = getSubStrings(string);
-        for (String candidateWord : candidateWordsMap.keySet())
-        {
-            if (isValid(candidateWord))
-            {
-                validWords.put(candidateWord, candidateWordsMap.get(candidateWord));
-            }
-        }
-        //validWords.addAll(candidateWords.stream().filter(candidateWord -> isValid(candidateWord)).collect(Collectors.toList()));
+        candidateWordsMap.keySet().stream().filter(candidateWord -> isValid(candidateWord)).forEach(candidateWord -> {
+            validWords.put(candidateWord, candidateWordsMap.get(candidateWord));
+        });
         return validWords;
     }
 }

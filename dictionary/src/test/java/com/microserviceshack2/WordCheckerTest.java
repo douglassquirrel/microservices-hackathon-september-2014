@@ -1,6 +1,7 @@
 package com.microserviceshack2;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class WordCheckerTest {
     @Before
     public void setup()
     {
-        wordChecker = new WordChecker();
+        wordChecker = WordChecker.getInstance();
     }
 
     @Test
@@ -51,6 +52,14 @@ public class WordCheckerTest {
     public void return_list_of_valid_word_in_string()
     {
         Map<String, Integer> validWords = wordChecker.getValidWords("fishpies");
+        assertFalse(validWords.isEmpty());
+        outputValidWords(validWords);
+    }
+
+    @Test
+    public void return_list_of_valid_word_in_string_with_spaces()
+    {
+        Map<String, Integer> validWords = wordChecker.getValidWords("   fi  sh  pies");
         assertFalse(validWords.isEmpty());
         outputValidWords(validWords);
     }
