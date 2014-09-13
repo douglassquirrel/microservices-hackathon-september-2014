@@ -16,11 +16,20 @@
         <artifactId>amqp-client</artifactId>
         <version>${rabbitmq.client.version}</version>
     </dependency>
+
     <dependency>
      <groupId>io.dropwizard</groupId>
      <artifactId>dropwizard-jackson</artifactId>
      <version>${dropwizard.version}</version>            
     </dependency>
+    
+	<dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+		<version>4.10</version>
+		<!--<scope>test</scope>-->
+	</dependency>
+    
   </dependencies>
   
 </project>
