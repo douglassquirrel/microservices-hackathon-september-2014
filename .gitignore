@@ -1,3 +1,9 @@
 node_modules
+.gradle
 .DS_Store
+classes
+out
+*.iml
 .idea
+gradlew
+gradlew.bat
