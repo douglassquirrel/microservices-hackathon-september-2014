@@ -2,10 +2,11 @@ import receiver
 import json
 
 class BoardPrinter(receiver.Receiver):
-    topics = ['board.*', 'game.score']
+    topics = ['board.*', 'game.score', 'game.ended']
     score = 0
     board = []
     id = None
+    status = None
 
     def set_id(self, id):
         self.id = id
@@ -21,9 +22,11 @@ class BoardPrinter(receiver.Receiver):
                 if board is None:
                     return
                 self.print_board(board)
+            elif topic == 'game.ended':
+                self.status = "GAME OVER"
             elif 'score' in content:
                 self.score = content['score']
-                self.reprint()
+            self.reprint()
         except Exception, e:
             print "EXCEPTION!!!!"
             import traceback
@@ -51,22 +54,29 @@ class BoardPrinter(receiver.Receiver):
     def reprint(self):
         board = self.board
         self.clear_screen()
-        width = len(board[0])*3
-        print "+" + "-" * width + "+"
-        for row in board:
-            print "|",
-            pad = ""
-            for item in row:
-                print pad + (item or ' '),
-                pad = " "
-            print "|",
-            print ""
-        print "+" + "-" * width + "+"
+        width = 0
+        if board:
+            width = len(board[0])*3
+            print "+" + "-" * width + "+"
+            for row in board:
+                print "|",
+                pad = ""
+                for item in row:
+                    print pad + (item or ' '),
+                    pad = " "
+                print "|",
+                print ""
+            print "+" + "-" * width + "+"
+        else:
+            print "No board!"
         self.print_footer()
 
     def print_footer(self):
         print ""
         print "*** Current score:", self.score
+        if self.status:
+            print "    ", self.status
+        print "(game id = %s)" % (self.id, )
 
     def run(self):
         self.start()
