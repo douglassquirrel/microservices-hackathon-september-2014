@@ -39,22 +39,24 @@ moveLetterLeft = (publisher,gameId)->
     
     letter_position = games[gameId].letter_possition;
     grid = games[gameId].grid
-    if(letter_position.x>0)
-        grid[letter_position.y][letter_position.x - 1 ] = grid[letter_position.y][letter_position.x]
+    newX = ( letter_position.x - 1 + columnSize ) % columnSize
+    if(grid[letter_position.y][newX] == "")
+        grid[letter_position.y][ newX ] = grid[letter_position.y][letter_position.x]
         grid[letter_position.y][letter_position.x] = ''
-        letter_position.x--
+        letter_position.x = newX
         publishBoardUpdate(publisher,gameId)
 
 moveLetterRight = (publisher,gameId)->
     console.log("moving right #{gameId}")
     if (!games[gameId].letter_possition) then return;
-        
     letter_position = games[gameId].letter_possition;
     grid = games[gameId].grid
-    if(letter_position.x<columnSize-1)
-        grid[letter_position.y][letter_position.x + 1 ] = grid[letter_position.y][letter_position.x]
+    newX = (letter_position.x + 1) % columnSize
+    
+    if(grid[letter_position.y][newX] == "")
+        grid[letter_position.y][newX] = grid[letter_position.y][letter_position.x]
         grid[letter_position.y][letter_position.x] = ''
-        letter_position.x++
+        letter_position.x = newX;
         publishBoardUpdate(publisher,gameId)
 
 movementEventHandler = (publisher)->
