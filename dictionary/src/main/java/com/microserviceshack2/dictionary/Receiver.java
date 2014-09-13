@@ -10,6 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.microserviceshack2.WordChecker;
+import com.microserviceshack2.rest.Connection;
+import com.microserviceshack2.rest.Direction;
+import com.microserviceshack2.rest.Word;
+import com.microserviceshack2.rest.WordsFound;
 import org.apache.http.ConnectionReuseStrategy;
 import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
@@ -146,14 +151,30 @@ public class Receiver {
 			String id = ((Map)data).get("id").toString();
 			List<List<String>> grid  = (List<List<String>>)(((Map)data).get("grid"));
 			List<String> gridConverted = new ArrayList<String>();
+            int rowIndex =0;
+            List<Word> wordList = new ArrayList<Word>();
 			for (List<String> list : grid) {
-				StringBuilder sb = new StringBuilder();
-				for (String string : list) {
-					sb.append(string);
-				}
-				gridConverted.add(sb.toString());
-			}
-		}
+                StringBuilder sb = new StringBuilder();
+                for (String string : list) {
+                    sb.append(string);
+                }
+                WordChecker wordChecker = WordChecker.getInstance();
+                String line = sb.toString();
+                Map<String, Integer> validWordsMap = wordChecker.getValidWords(line);
+                //gridConverted.add(sb.toString());
+                rowIndex++;
+                for (String validWord : validWordsMap.keySet()) {
+                    Word word = new Word(validWord,rowIndex, validWordsMap.get(validWord), Direction.H);
+                    wordList.add(word);
+                }
+            }
+            WordsFound wordsFound = new WordsFound(wordList, id);
+            String url = "http://54.76.117.95:8080";
+            String path = "topics";
+            String topicName = "words.found";
+            int response = new Connection().postTopicWithBody(url, path,topicName, wordsFound);
+
+        }
 	}
 
 	public Object getNextMessage() {

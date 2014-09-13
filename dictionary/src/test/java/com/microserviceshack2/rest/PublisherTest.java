@@ -21,7 +21,7 @@ public class PublisherTest {
 		words.add(new Word("testWord1", 1, 2, Direction.V));
 		words.add(new Word("testWord2", 5, 1, Direction.H));
 		
-		int id = 1;
+		String id = "1";
 		WordsFound wordsFound = new WordsFound(words, id);
 		//when
 		int response = new Connection().postTopicWithBody(url, path,topicName, wordsFound);

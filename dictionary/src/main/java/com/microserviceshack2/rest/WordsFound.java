@@ -6,8 +6,8 @@ import com.google.gson.Gson;
 
 public class WordsFound {
 	private List<Word> words;
-	private int id;
-	public WordsFound(List<Word> words, int id) {
+	private String id;
+	public WordsFound(List<Word> words, String id) {
 		this.words = words;
 		this.id = id;
 	}
