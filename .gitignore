@@ -1,9 +1,9 @@
-.idea
+node_modules
 .gradle
 .DS_Store
 classes
 out
 *.iml
-gradle
+.idea
 gradlew
 gradlew.bat
