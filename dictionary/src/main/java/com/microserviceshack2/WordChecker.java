@@ -3,7 +3,10 @@ package com.microserviceshack2;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
 
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -12,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -19,7 +23,8 @@ import java.util.stream.Stream;
  */
 public class WordChecker {
 
-    private BloomFilter<String> words;
+    public static final String WORD_LIST = "/word-list.txt";
+    private BloomFilter<String> wordFilter;
     private Set<String> allWords;
 
     public WordChecker() {
@@ -28,7 +33,7 @@ public class WordChecker {
 
     public boolean isInvalid(String word) {
         String cleanedWord = getCleanedWord(word);
-        return !words.mightContain(cleanedWord);
+        return !wordFilter.mightContain(cleanedWord);
     }
 
     private String getCleanedWord(String word) {
@@ -44,14 +49,33 @@ public class WordChecker {
     }
 
     private void setupWord(String word) {
-        words.put(word);
+        wordFilter.put(word);
         allWords.add(word);
     }
 
+    int countWordsInFile() {
+        InputStreamReader reader = new InputStreamReader(this.getClass().getResourceAsStream(WORD_LIST));
+        LineNumberReader lnr = new LineNumberReader(reader);
+        try {
+
+            lnr.skip(Long.MAX_VALUE);
+            return lnr.getLineNumber()+1;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return 0;
+        } finally {
+            try {
+                lnr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private void loadWords() {
-        words = BloomFilter.create(Funnels.stringFunnel(Charset.defaultCharset()), 178691, 0.01);
-        allWords = new HashSet<String>();
-        try (Stream<String> stream = Files.lines(Paths.get(this.getClass().getResource("/word-list.txt").toURI()), Charset.defaultCharset())) {
+        wordFilter = BloomFilter.create(Funnels.stringFunnel(Charset.defaultCharset()), countWordsInFile(), 0.01);
+        allWords = new HashSet<>();
+        try (Stream<String> stream = Files.lines(Paths.get(this.getClass().getResource(WORD_LIST).toURI()), Charset.defaultCharset())) {
             stream.forEach(this::setupWord);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -61,7 +85,7 @@ public class WordChecker {
     }
 
     List<String> getSubStrings(String string) {
-        List<String> subStrings = new ArrayList<String>();
+        List<String> subStrings = new ArrayList<>();
         for (int from = 0; from < string.length(); from++) {
             for (int to = from + 1; to <= string.length(); to++) {
                 subStrings.add(string.substring(from, to));
@@ -71,14 +95,9 @@ public class WordChecker {
     }
 
     public List<String> getValidWords(String string) {
-        List<String> validWords = new ArrayList<String>();
+        List<String> validWords = new ArrayList<>();
         List<String> candidateWords = getSubStrings(string);
-        for (String candidateWord : candidateWords)
-        {
-            if (isValid(candidateWord)) {
-                validWords.add(candidateWord);
-            }
-        }
+        validWords.addAll(candidateWords.stream().filter(candidateWord -> isValid(candidateWord)).collect(Collectors.toList()));
         return validWords;
     }
 }

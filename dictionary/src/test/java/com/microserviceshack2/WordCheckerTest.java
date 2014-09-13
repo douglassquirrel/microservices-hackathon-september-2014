@@ -43,22 +43,26 @@ public class WordCheckerTest {
         assertFalse(wordChecker.isInvalid("doggy"));
         assertFalse(wordChecker.isInvalid("monkey"));
         assertFalse(wordChecker.isInvalid("bonk"));
+        assertTrue(wordChecker.isValid("zzz"));
     }
 
     @Test
     public void return_list_of_valid_word_in_string()
     {
-        List<String> validWords = wordChecker.getValidWords("doggie");
-        assertFalse(validWords.isEmpty());;
-        for (String word : validWords)
-        {
-            System.out.println(word);
-        }
+        List<String> validWords = wordChecker.getValidWords("fishpies");
+        assertFalse(validWords.isEmpty());
+        validWords.forEach(System.out::println);
     }
 
     @Test
     public void return_all_sub_strings()
     {
         assertEquals(6, wordChecker.getSubStrings("cat").size());
+    }
+
+    @Test
+    public void return_line_in_file()
+    {
+        assertEquals(178691, wordChecker.countWordsInFile());
     }
 }
