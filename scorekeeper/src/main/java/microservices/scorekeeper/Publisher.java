@@ -12,9 +12,8 @@ public class Publisher {
     private final String exchangeName;
 
     public Publisher(ConnectionFactory connectionFactory, String exchangeName) {
-        Connection connection;
         try {
-            connection = connectionFactory.newConnection();
+            Connection connection = connectionFactory.newConnection();
             channel = connection.createChannel();
         } catch (IOException e) {
             throw new RuntimeException(e);
